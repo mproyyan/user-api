@@ -1,0 +1,19 @@
+GET http://localhost:8080/users
+
+###
+
+POST http://localhost:8080/users
+Content-Type: application/json
+
+{
+    "name": "John Doe",
+    "email": "jhondoe"
+}
+
+###
+
+GET http://localhost:8080/users/8834ee52-7933-4ac4-8bb3-f0d13861a11
+
+###
+
+DELETE http://localhost:8080/users/8834ee52-7933-4ac4-8bb3-f0d13861a11d
