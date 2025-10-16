@@ -38,8 +38,8 @@ func (h *UserHandler) GetUserByID(c *gin.Context) {
 
 func (h *UserHandler) CreateUser(c *gin.Context) {
 	var body struct {
-		Name  string `json:"name"`
-		Email string `json:"email"`
+		Name  string `json:"name" binding:"required"`
+		Email string `json:"email" binding:"required,email"`
 	}
 
 	if err := c.ShouldBindJSON(&body); err != nil {
@@ -63,6 +63,6 @@ func (h *UserHandler) DeleteUser(c *gin.Context) {
 		c.JSON(http.StatusNotFound, gin.H{"error": "user not found"})
 		return
 	}
-	
+
 	c.JSON(http.StatusOK, gin.H{"message": "user deleted"})
 }
