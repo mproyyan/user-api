@@ -1,6 +1,7 @@
 package main
 
 import (
+	"net/http"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -15,6 +16,18 @@ func main() {
 	handler := handlers.NewUserHandler(service)
 
 	router := gin.Default()
+
+	router.GET("/", func(ctx *gin.Context) {
+		ctx.JSON(http.StatusOK, gin.H{
+			"message": "Welcome 👋",
+			"endpoints": []string{
+				"GET /users        		- Get list of users",
+				"POST /users       		- Create new user",
+				"GET /users/:id    		- Get user by ID",
+				"DELETE /users/:id 		- Delete user by ID",
+			},
+		})
+	})
 
 	router.GET("/users", handler.GetUsers)
 	router.GET("/users/:id", handler.GetUserByID)
