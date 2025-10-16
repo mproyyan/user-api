@@ -1,6 +1,9 @@
 package main
 
 import (
+	"fmt"
+	"os"
+
 	"github.com/gin-gonic/gin"
 	"github.com/mproyyan/user-api/internal/handlers"
 	"github.com/mproyyan/user-api/internal/repositories"
@@ -19,5 +22,10 @@ func main() {
 	router.POST("/users", handler.CreateUser)
 	router.DELETE("/users/:id", handler.DeleteUser)
 
-	router.Run(":8080")
+	host := os.Getenv("APP_HOST")
+	if host == "" {
+		host = "localhost"
+	}
+
+	router.Run(fmt.Sprintf("%s:8080", host))
 }
