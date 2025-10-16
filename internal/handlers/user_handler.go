@@ -47,6 +47,17 @@ func (h *UserHandler) CreateUser(c *gin.Context) {
 		return
 	}
 
+	exists, err := h.service.IsEmailExists(body.Email)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	if exists {
+		c.JSON(http.StatusConflict, gin.H{"error": "email already exists"})
+		return
+	}
+
 	user, err := h.service.CreateUser(body.Name, body.Email)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

@@ -43,7 +43,17 @@ func (r *InMemoryUserRepository) DeleteByID(id string) error {
 	if _, exists := r.data[id]; !exists {
 		return errors.New("user not found")
 	}
-	
+
 	delete(r.data, id)
 	return nil
+}
+
+func (r *InMemoryUserRepository) FindByEmail(email string) (*entities.User, error) {
+	for _, user := range r.data {
+		if user.Email == email {
+			return &user, nil
+		}
+	}
+
+	return nil, nil
 }

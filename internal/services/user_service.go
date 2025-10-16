@@ -33,3 +33,12 @@ func (s *UserService) CreateUser(name, email string) (*entities.User, error) {
 func (s *UserService) DeleteUser(id string) error {
 	return s.repo.DeleteByID(id)
 }
+
+func (s *UserService) IsEmailExists(email string) (bool, error) {
+	user, err := s.repo.FindByEmail(email)
+	if err != nil {
+		return false, err
+	}
+
+	return user != nil, nil
+}
