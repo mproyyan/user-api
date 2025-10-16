@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -24,8 +23,8 @@ func main() {
 
 	host := os.Getenv("APP_HOST")
 	if host == "" {
-		host = "localhost"
+		host = "127.0.0.1:8080" // default
 	}
 
-	router.Run(fmt.Sprintf("%s:8080", host))
+	router.Run(host)
 }
