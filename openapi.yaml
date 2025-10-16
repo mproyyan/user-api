@@ -1,0 +1,150 @@
+openapi: 3.0.3
+info:
+  title: Simple User API
+  version: 1.0.0
+  description: >
+    REST API sederhana berbasis Golang + Gin untuk manajemen user.
+
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+
+paths:
+  /users:
+    get:
+      summary: Get all users
+      description: Mengambil daftar seluruh user yang tersimpan di database.
+      responses:
+        "200":
+          description: Daftar user berhasil diambil.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+        "500":
+          description: Terjadi kesalahan pada server.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Create a new user
+      description: Menambahkan user baru ke sistem.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateUserRequest"
+      responses:
+        "201":
+          description: User berhasil dibuat.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          description: Request body tidak valid.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Terjadi kesalahan pada server.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /users/{id}:
+    get:
+      summary: Get user by ID
+      description: Mengambil detail user berdasarkan UUID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: UUID dari user yang ingin diambil.
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: User ditemukan.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "404":
+          description: User tidak ditemukan.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    delete:
+      summary: Delete user by ID
+      description: Menghapus user berdasarkan UUID.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: UUID dari user yang akan dihapus.
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: User berhasil dihapus.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: user deleted
+        "404":
+          description: User tidak ditemukan.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "7f4b4c7b-5a5c-4f47-bd6b-d1b9297a3c15"
+        name:
+          type: string
+          example: "Royyan"
+        email:
+          type: string
+          example: "royyan@example.com"
+
+    CreateUserRequest:
+      type: object
+      required:
+        - name
+        - email
+      properties:
+        name:
+          type: string
+          example: "Royyan"
+        email:
+          type: string
+          example: "royyan@example.com"
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "user not found"
